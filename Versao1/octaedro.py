@@ -5,13 +5,12 @@ from OpenGL.GLU import *
 
 vertices = (
 
-    (-1,0,0),
-    (0,1,0),
-    (1,0,0),
-    (0,-1,0),
-    (0,0,1),
-    (0,0,-1)
-
+    (-1,0,0),#0
+    (0,1,0),#1
+    (1,0,0),#2
+    (0,-1,0),#3
+    (0,0,1),#4
+    (0,0,-1),#5
 )
 
 arestas = (
@@ -29,25 +28,23 @@ arestas = (
     (5,3),
 )
 
+
 def Octaedro():
-    glBegin(GL_LINES)       # Inicia o OpenGL e inidica q la
-    # vem instruções
+    glBegin(GL_LINES)
     for aresta in arestas:
         for vertex in aresta:
-            glVertex3fv(vertices[vertex])  # Informa o vertice
-            # para a aresta
+            glVertex3fv(vertices[vertex])
     glEnd()
 
 
 def main():
 
     pygame.init()
-    display = (1024, 760)
-    pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
-
+    display = (800,600)
+    pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
+    clock = pygame.time.Clock()
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
-
-    glTranslatef(0, 0, -5)
+    glTranslatef(0.0,0.0, -5)
 
     while True:
         for event in pygame.event.get():
@@ -80,10 +77,12 @@ def main():
             if event.key == pygame.K_l:
                 glScalef(1.1, 1.1, 1.1)
 
-            if event.key == pygame.K_c:
+            if event.key == pygame.K_g:
                 gluLookAt(0, 0, 0, 1, 0, 1, 0, 0, 1)
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         Octaedro()
+
         pygame.display.flip()
+        clock.tick(60)
 main()

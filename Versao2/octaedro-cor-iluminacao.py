@@ -11,10 +11,6 @@ vertices = (
     (0,-1,0),#3
     (0,0,1),#4
     (0,0,-1),#5
-    (-0.5,-0.5,0),
-    (0.5,-0.5,0),
-    (0.5,0.5,0),
-    (-0.5,0.5,0),
 )
 
 arestas = (
@@ -33,23 +29,27 @@ arestas = (
 )
 
 faces = (
-    (0,1,6,4),
-    (1,2,7,4),
-    (2,3,8,4),
-    (3,0,9,4),
-    (0,1,6,5),
-    (1,2,7,5),
-    (2,3,8,5),
-    (3,0,9,5),
+    (0,1,4),
+    (1,2,4),
+    (2,3,4),
+    (3,0,4),
+    (0,1,5),
+    (1,2,5),
+    (2,3,5),
+    (3,0,5),
 )
 
 cores = (
-    (0,0,1),
-    (0,0,0),
-    (0,0,1),
-    (0,0,0),
-    (0,0,1),
-    (0,0,0),
+    (0, 0, 1),
+    (0, 1, 0),
+    (0, 0, 1),
+    (0, 1, 0),
+    (1, 0, 1),
+    (0, 0, 1),
+    (0, 0, 1),
+    (0, 1, 0),
+    (1, 0, 1),
+    (0, 0, 1)
 )
 
 normals = [
@@ -64,17 +64,46 @@ normals = [
     (1,  0,  0),
     (0, -1,  0)
 ]
+textureCoordinates = (
+    (0, 0),
+    (0, 1),
+    (1, 1)
+)
+
+def carregaTextura():
+    textureSurface = pygame.image.load('textura.jpg')
+    textureData = pygame.image.tostring(textureSurface, "RGBA", 1)
+    width = textureSurface.get_width()
+    height = textureSurface.get_height()
+
+    glEnable(GL_TEXTURE_2D)
+    texid = glGenTextures(1)
+
+    glBindTexture(GL_TEXTURE_2D, texid)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+                 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData)
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+
+    return texid
 
 def Octaedro():
-    glBegin(GL_QUADS)
-    for surface in faces:
+    glColor3f(1,1,1)
+    glBegin(GL_TRIANGLES)
+    for i_surface, surface in enumerate(faces):
         x = 0
-        for vertex in surface:
-            x+=1
-            glColor3fv(cores[x])
+        glNormal3fv(normals[i_surface])
+        for i_vertex, vertex in enumerate(surface):
+            x += 1
+            #glColor3fv(cores[x])
+            glTexCoord2fv(textureCoordinates[i_vertex])
             glVertex3fv(vertices[vertex])
     glEnd()
 
+    glColor3fv(cores[0])
     glBegin(GL_LINES)
     for aresta in arestas:
         for vertex in aresta:
@@ -134,7 +163,7 @@ def main():
             if event.key == pygame.K_l:
                 glScalef(1.1, 1.1, 1.1)
 
-            if event.key == pygame.K_c:
+            if event.key == pygame.K_g:
                 gluLookAt(0, 0, 0, 1, 0, 1, 0, 0, 1)
 
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
