@@ -65,9 +65,10 @@ normals = [
     (0, -1,  0)
 ]
 textureCoordinates = (
-    (0, 0),
-    (0, 1),
-    (1, 1)
+  (0, 0), (0, 1), (1, 1), (1, 0), (1,2), (1,4),
+    (0, 2), (2, 1), (2, 2), (2,0), (2,3), (2,4),
+    (0, 3),(3, 1), (3, 2), (3, 0), (3,4), (3,3),
+    (0, 4),(4, 1), (4, 2), (4, 0), (4,3), (4,4)
 )
 
 def carregaTextura():
@@ -91,19 +92,19 @@ def carregaTextura():
     return texid
 
 def Octaedro():
-    glColor3f(1,1,1)
+    # glColor3f(1,1,1)
     glBegin(GL_TRIANGLES)
     for i_surface, surface in enumerate(faces):
         x = 0
         glNormal3fv(normals[i_surface])
         for i_vertex, vertex in enumerate(surface):
             x += 1
-            #glColor3fv(cores[x])
+            glColor3fv(cores[x])
             glTexCoord2fv(textureCoordinates[i_vertex])
             glVertex3fv(vertices[vertex])
     glEnd()
 
-    glColor3fv(cores[0])
+    # glColor3fv(cores[0])
     glBegin(GL_LINES)
     for aresta in arestas:
         for vertex in aresta:
@@ -173,6 +174,7 @@ def main():
         glEnable(GL_COLOR_MATERIAL)
         glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE)
 
+        carregaTextura()
         Octaedro()
 
         glDisable(GL_LIGHT0)
