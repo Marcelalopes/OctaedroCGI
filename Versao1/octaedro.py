@@ -78,7 +78,7 @@ def main():
                 glScalef(1.1, 1.1, 1.1)
 
             if event.key == pygame.K_g:
-                gluLookAt(0, 0, 1, 1, 0, 0, 1, 0, 0)
+                gluLookAt(0, 0, 0, 1, 0, 1, 0, 0, 1)
 
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         Octaedro()
